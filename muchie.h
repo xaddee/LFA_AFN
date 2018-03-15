@@ -4,20 +4,27 @@
 
 #ifndef UNTITLED_MUCHIE_H
 #define UNTITLED_MUCHIE_H
-#include "stare.h"
+
+typedef struct {
+    bool finish;
+    int number;
+    int nrmuchii;
+} stare;
+
 #include <cstring>
 
 class muchie {
-private:
-    char* letter;
+public:
+    char *letter;
     stare start;
     stare stop;
-public:
+};
+/*public:
     muchie();
    ~muchie();
-    void setStart(int, bool );
-    void setStop(int, bool );
-    void setLetter(char *);
+    void setStart(stare);
+    void setStop(stare);
+    void setLetter(char*);
     char* getLetter();
 
 };
@@ -27,17 +34,15 @@ muchie::muchie()
 muchie::~muchie()
 = default;
 
-void muchie::setStart(int n, bool f)
+void muchie::setStart(stare q)
 {
-    start.setNumber(n);
-    start.setFinish(f);
+  start = q;
 
 }
 
-void muchie::setStop(int n, bool f)
+void muchie::setStop(stare q)
 {
-    stop.setNumber(n);
-    stop.setFinish(f);
+    stop = q;
 }
 
 void muchie::setLetter(char* l)
@@ -48,5 +53,5 @@ void muchie::setLetter(char* l)
 char* muchie::getLetter()
 {
     return letter;
-}
+}*/
 #endif //UNTITLED_MUCHIE_H

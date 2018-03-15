@@ -3,4 +3,4 @@ project(untitled)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(untitled main.cpp muchie.cpp muchie.h stare.cpp stare.h)
+add_executable(untitled main.cpp muchie.h)
