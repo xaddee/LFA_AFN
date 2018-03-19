@@ -3,76 +3,95 @@
 #include <fstream>
 using namespace std;
 
+/**
+ * Param @word is a char representing the word that we verify
+ * Param @startOfEdge represents the state that we start with
+ * Param @egesMatrix represents an matrix of all the edges that we readed ( start -letter- stop)
+ * Param @currentLetterIndex is an integer used to keep count of the letter that we are verifying (I used it because i didn't want to delete the word or make a copy of it)
+ * returns true or false, represents if the word belongs to the alphabet
+ */
+bool AFD(char *word, State startOfEdge, Edge **edgesMatrix, int currentLetterIndex) {
+    if (currentLetterIndex == strlen(word) - 1 && startOfEdge.finish) return true;
 
-bool AFD(char *cuvant, stare start, muchie **matriceMuchii, int k) {
-    if (k == strlen(cuvant) && start.finish)
-        return true;
-    else {
-        for (int i = 0; i < start.nrmuchii; i++) {
-            if (matriceMuchii[start.number][i].letter[0] == cuvant[k]) {
-                k++;
-                return AFD(cuvant, matriceMuchii[start.number][i].stop, matriceMuchii, k);
-            }
+    if (currentLetterIndex == strlen(word) - 1 && !startOfEdge.finish) return false;
+
+    if (currentLetterIndex <= strlen(word) - 1 && startOfEdge.numberOfEdges == 0) return false;
+
+    for (int i = 0; i < startOfEdge.numberOfEdges; i++)
+        if (edgesMatrix[startOfEdge.number][i].letter[0] == word[currentLetterIndex]) {
+            currentLetterIndex++;
+            return AFD(word, edgesMatrix[startOfEdge.number][i].stop, edgesMatrix, currentLetterIndex);
         }
-    }
-    return false;
 }
 
-ifstream f("datein.txt");
+// The empty word is "#";
+
 int main() {
-    char cuvant[21];
-    int n;
-    //cout << "Introduceti cuvantul ce trebuie testat: ";
-    f >> cuvant;
-    cout << cuvant;
-    //cout << "Introduceti nr de stari: ";
-    f >> n;
-    cout << n;
+    ifstream h("../datein2.txt"); // used for giving aditional examples without destroying the other txt file
+    ifstream f("../datein.txt"); // testing file
 
-    stare q[n];
-    for (int i = 0; i < n; i++) {
-        q[i].finish = false;
-        q[i].number = i;
+    char word[21];
+    int nStates;
+    //Reads the word that needs to be tested
+    f >> word;
+    cout << word;
+    //Reads the number of states
+    f >> nStates;
+    cout << nStates << "\n";
+
+    // Q represents the state. exp: q[0] is the initial state;
+    State State[nStates];
+    // Initializes the states;
+    for (int i = 0; i < nStates; i++) {
+        State[i].finish = false;
+        State[i].number = i;
     }
 
-    for (int i = 0; i < n; i++) {
-        int x;
-        //cout << "Este starea "<< i << " finala? (1/0) ";
-        f >> x;
-        if (x == 1) q[i].finish = true;
+    for (int i = 0; i < nStates; i++) {
+        int finalOrNot;
+        //Sees if the i state is final or not (1 true, 0 false);
+        f >> finalOrNot;
+        if (finalOrNot == 1) State[i].finish = true;
     }
 
-    muchie **muchii;
-    muchii = new muchie *[n];
+    Edge **edges;
+    edges = new Edge *[nStates];
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < nStates; i++) {
+        // reads how many edges does the state i have;
+        cout << "Nr de muchii pt starea " << i << ": ";
+        f >> State[i].numberOfEdges;
+        cout << State[i].numberOfEdges << "\n";
+        edges[i] = new Edge[State[i].numberOfEdges];
 
-        //cout << "Nr de muchii pt starea " << i << ": ";
-        f >> q[i].nrmuchii;
-        muchii[i] = new muchie[q[i].nrmuchii];
-        for (int j = 0; j < q[i].nrmuchii; j++) {
-            char *a;
-            a = new char[1];
-            int final;
-            muchii[i][j].start = q[i];
-            //cout << "Introduceti litera de pe muchia "<<j+1<< " a starii " << i << ":";
-            f >> (*a);
-            cout << (*a);
-            muchii[i][j].letter = new char[1];
-            strcpy(muchii[i][j].letter, a);
-            //cout << "Introduceti starea in care ajunge (doar cifra): ";
-            f >> final;
-            cout << final;
-            muchii[i][j].stop = q[final];
-            delete[]a;
+        for (int j = 0; j < State[i].numberOfEdges; j++) {
+            char *letter; // Used to see what letter brings us to witch state;
+            letter = new char[1];
+
+            int finalEdgeState; // the state that we ended up into
+            edges[i][j].start = State[i];
+
+            //Read the letter
+            f >> (*letter);
+            edges[i][j].letter = new char[1];
+            strcpy(edges[i][j].letter, letter); // save the letter into our matrix;
+
+            // Reads only the number of the state that we reached with the specific letter;
+            f >> finalEdgeState;
+            edges[i][j].stop = State[finalEdgeState];
+            cout << edges[i][j].start.number << " " << edges[i][j].letter[0] << " " << edges[i][j].stop.number << "\n";
+
+            delete[]letter;
         }
 
 
     }
-
-    if (AFD(cuvant, q[0], muchii, 0)) {
-        cout << " Cuvantul apartine alfabetului";
-    } else cout << "Cuvantul nu apartine alfabetului";
+    cout << "\n";
+    if (word == "#") {
+        if (State[0].finish) cout << "Cuvantul apartine alfabetului";
+        else cout << "Cuvantul nu apartine alfabetului";
+    } else if (AFD(word, State[0], edges, 0)) cout << " Cuvantul apartine alfabetului";
+    else cout << "Cuvantul nu apartine alfabetului";
 
     return 0;
 }

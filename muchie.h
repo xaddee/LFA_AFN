@@ -5,53 +5,19 @@
 #ifndef UNTITLED_MUCHIE_H
 #define UNTITLED_MUCHIE_H
 
+#include <cstring>
+
 typedef struct {
     bool finish;
     int number;
-    int nrmuchii;
-} stare;
+    int numberOfEdges;
+} State;
 
-#include <cstring>
-
-class muchie {
+class Edge {
 public:
     char *letter;
-    stare start;
-    stare stop;
+    State start;
+    State stop;
 };
-/*public:
-    muchie();
-   ~muchie();
-    void setStart(stare);
-    void setStop(stare);
-    void setLetter(char*);
-    char* getLetter();
 
-};
-muchie::muchie()
-= default;
-
-muchie::~muchie()
-= default;
-
-void muchie::setStart(stare q)
-{
-  start = q;
-
-}
-
-void muchie::setStop(stare q)
-{
-    stop = q;
-}
-
-void muchie::setLetter(char* l)
-{
-    strcpy(letter,l);
-}
-
-char* muchie::getLetter()
-{
-    return letter;
-}*/
 #endif //UNTITLED_MUCHIE_H
