@@ -20,7 +20,7 @@ bool DFA(char *word, State startOfEdge, Edge **edgesMatrix, int currentLetterInd
 
     for (int i = 0; i < startOfEdge.numberOfEdges; i++)
         if (edgesMatrix[startOfEdge.number][i].letter[0] == word[currentLetterIndex]) {
-            return AFD(word, edgesMatrix[startOfEdge.number][i].stop, edgesMatrix, currentLetterIndex + 1);
+            return DFA(word, edgesMatrix[startOfEdge.number][i].stop, edgesMatrix, currentLetterIndex + 1);
         }
 }
 
@@ -41,7 +41,7 @@ bool NFA(char *word, State startOfEdge, Edge **edgesMatrix, int currentLetterInd
 
     for (int i = 0; i < startOfEdge.numberOfEdges; i++) {
         if (edgesMatrix[startOfEdge.number][i].letter[0] == word[currentLetterIndex])
-            if (AFN(word, edgesMatrix[startOfEdge.number][i].stop, edgesMatrix, currentLetterIndex + 1)) return true;
+            if (NFA(word, edgesMatrix[startOfEdge.number][i].stop, edgesMatrix, currentLetterIndex + 1)) return true;
 
     }
 
